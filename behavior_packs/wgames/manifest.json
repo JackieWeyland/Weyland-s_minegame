@@ -1,0 +1,42 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "My script behavior pack",
+    "description": "My behavior pack description",
+    "uuid": "babb7ef4-e63f-4462-b6bb-8875af6e1fee",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      26,
+      50
+    ]
+  },
+  "modules": [
+    {
+      "description": "Script resources",
+      "language": "javascript",
+      "type": "script",
+      "uuid": "f6dd264f-46d3-4198-b9cc-6ce3c8b77e93",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "entry": "scripts/main.js"
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": [
+        2,
+        10,
+        0
+      ]
+    }
+  ]
+}
