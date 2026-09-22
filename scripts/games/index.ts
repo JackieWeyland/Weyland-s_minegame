@@ -1,0 +1,1 @@
+import './bomb_party'

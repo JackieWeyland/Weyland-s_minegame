@@ -3,7 +3,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -30,5 +30,12 @@
     "mcaddon"
   ],
   "editor.tabSize": 2,
-  "eslint.experimental.useFlatConfig": true
+  "eslint.experimental.useFlatConfig": true,
+  "triggerTaskOnSave.tasks": {
+    "local-deploy": [
+      "**/*.ts",
+      "**/*.json"
+    ]
+  },
+  "triggerTaskOnSave.on": true
 }

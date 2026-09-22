@@ -1,0 +1,1 @@
+import './npcs_interaction'
