@@ -1,1 +1,1 @@
-import './bomb_party'
+export * from './bomb_party'
