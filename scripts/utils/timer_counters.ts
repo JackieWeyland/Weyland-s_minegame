@@ -1,28 +1,25 @@
 import { system } from "@minecraft/server"
 
-function timerCounterCummon(time: number, onChange: (time: number) => void, onFinish: () => void) {
-  let currentTime = 0
-  const counter = () => {
-    if (currentTime >= time) return onFinish()
-    currentTime++
-    onChange(currentTime)
-    system.runTimeout(counter, 20)
-  }
-  counter()
+export class OnTickTimerEvent {
+  private constructor() { }
+  readonly currentTime: number
+  readonly cancelTimer: () => void
 }
 
-function timerCounterInverse(time: number, onChange: (time: number) => void, onFinish: () => void) {
-  let currentTime = time
-  const counter = () => {
-    if (currentTime <= 0) return onFinish()
-    onChange(currentTime)
-    currentTime--
-    system.runTimeout(counter, 20)
-  }
-  counter()
-}
+export class TimerManager { // GERENCIADOR DE TEMPORIZADORES
+  private constructor() { }
 
-export class TimerCouter {
-  static Cummon = timerCounterCummon
-  static Inverse = timerCounterInverse
+  static SetTimer(time: number, onTick: (arg0: OnTickTimerEvent) => void, end: () => void) { // DEFINIR TEMPORIZADOR
+    let currentTime: number = 0 // MONITORA O TEMPO
+    let canceled: boolean = false // CANSELA O CONTADOR
+    const cancelTimer = () => canceled = true // CANSELADOR
+    const timer = () => { // TEMPORIZADOR
+      if (canceled) return // INTERROMPE SE CANCELAR
+      if (currentTime >= time) return end() // EXECUTA SE O TEMPO ACABAR
+      currentTime++ // ATUALIZA O TEMPO
+      onTick({ cancelTimer, currentTime }) // EXECUTA DURANTE O TEMPO
+      if (!canceled) system.runTimeout(timer, 20) // PROXIMO TEMPO
+    }
+    timer() // INICIA O TEMPORIZADOR
+  }
 }

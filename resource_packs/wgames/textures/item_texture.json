@@ -1,0 +1,16 @@
+{
+  "resource_pack_name": "vanilla",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "exit_game_icon": {
+      "textures": [
+        "textures/geral_item/exit_game"
+      ]
+    },
+    "bomb_item_icon": {
+      "textures": [
+        "textures/bomb_party/bomb_item_icon"
+      ]
+    }
+  }
+}

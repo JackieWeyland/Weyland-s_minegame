@@ -1,0 +1,28 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "wgames:speed_power_up",
+      "materials": {
+        "default": "entity_emissive_alpha"
+      },
+      "textures": {
+        "default": "textures/power_ups/speed_power_up"
+      },
+      "geometry": {
+        "default": "geometry.speed_power_up"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ]
+      },
+      "animations": {
+        "idle": "animation.power_up.rotate"
+      },
+      "render_controllers": [
+        "controller.render.default"
+      ]
+    }
+  }
+}

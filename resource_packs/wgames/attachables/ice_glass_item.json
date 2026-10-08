@@ -1,0 +1,32 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "wgames:ice_glass_item",
+      "materials": {
+        "emissive": "entity_emissive_alpha",
+        "alphatest": "entity_alphatest",
+        "alphablend": "entity_alphablend"
+      },
+      "textures": {
+        "default": "textures/entity/ice_glass_texture"
+      },
+      "geometry": {
+        "default": "geometry.ice_glass_item"
+      },
+      // "scripts": {
+      //   "animate": [
+      //     {
+      //       "ftp": "c.is_first_person"
+      //     }
+      //   ]
+      // },
+      // "animations": {
+      //   // "ftp": "animation.bomb_item.ftp_holding"
+      // },
+      "render_controllers": [
+        "controller.render.ice_glass"
+      ]
+    }
+  }
+}

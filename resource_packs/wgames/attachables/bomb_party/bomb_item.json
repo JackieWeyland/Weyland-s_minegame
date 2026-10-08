@@ -1,0 +1,32 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "wgames:bomb_item",
+      "materials": {
+        "emissive": "entity_emissive_alpha",
+        "additive": "entity_beam_additive",
+        "alphatest": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/bomb_party/bomb_item"
+      },
+      "geometry": {
+        "default": "geometry.bomb_item"
+      },
+      "scripts": {
+        "animate": [
+          {
+            "ftp": "c.is_first_person"
+          }
+        ]
+      },
+      "animations": {
+        "ftp": "animation.bomb_item.ftp_holding"
+      },
+      "render_controllers": [
+        "controller.render.bomba_item"
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "bomba_party.music.01": {
+    "event_name": "bomba_party.music.01",
+    "min_delay": 0,
+    "max_delay": 0
+  },
+  "bomba_party.music.02": {
+    "event_name": "bomba_party.music.02",
+    "min_delay": 0,
+    "max_delay": 0
+  },
+  "bomba_party.music.03": {
+    "event_name": "bomba_party.music.03",
+    "min_delay": 0,
+    "max_delay": 0
+  },
+  "bomba_party.music.04": {
+    "event_name": "bomba_party.music.04",
+    "min_delay": 0,
+    "max_delay": 0
+  }
+}

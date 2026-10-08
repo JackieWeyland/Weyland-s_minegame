@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.0",
+  "render_controllers": {
+    "controller.render.ice_glass": {
+      "geometry": "geometry.default",
+      "materials": [
+        {
+          "*": "material.alphatest",
+          "glass": "material.alphablend",
+          "liquid": "material.emissive"
+        }
+      ],
+      "textures": [
+        "texture.default"
+      ]
+    }
+  }
+}

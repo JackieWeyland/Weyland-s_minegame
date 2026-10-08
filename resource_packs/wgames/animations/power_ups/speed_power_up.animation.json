@@ -1,0 +1,14 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.power_up.rotate": {
+			"loop": true,
+			"bones": {
+				"power_up": {
+					"rotation": [-45, "-q.anim_time * 100", 0],
+					"position": [0, "math.sin(q.anim_time * 100) * 2", 0]
+				}
+			}
+		}
+	}
+}

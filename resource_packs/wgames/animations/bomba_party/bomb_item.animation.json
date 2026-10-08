@@ -1,0 +1,15 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.bomb_item.ftp_holding": {
+			"loop": true,
+			"bones": {
+				"bomb": {
+					"rotation": [-10.6842, 27.5123, -107.7642],
+					"position": [-1.19534, -1.50676, 3.50725],
+					"scale": "math.ease_out_bounce(1, 1.2, (math.sin(q.anim_time * 200) + 1) / 2)"
+				}
+			}
+		}
+	}
+}

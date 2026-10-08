@@ -1,0 +1,29 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "wgames:coin_drop",
+      "materials": {
+        "additive": "entity_beam_additive",
+        "alphatest": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/coin_drop"
+      },
+      "geometry": {
+        "default": "geometry.coin_drop"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ]
+      },
+      "animations": {
+        "idle": "animation.coin_drop.idle"
+      },
+      "render_controllers": [
+        "controller.render.coin_drop"
+      ]
+    }
+  }
+}

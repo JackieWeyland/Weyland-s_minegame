@@ -1,0 +1,38 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.bomba_party_npc.idle": {
+			"loop": true,
+			"bones": {
+				"waist": {
+					"rotation": [0, "-22.5 - math.ease_in_out_elastic(10, -10, v.modifie_sin_3)", 0]
+				},
+				"head": {
+					"rotation": [0, "22.5 - math.ease_in_out_elastic(20, -20, v.modifie_sin_3)", 0]
+				},
+				"rightArm": {
+					"rotation": ["-45.1355 - math.ease_in_cubic(0, 30, v.modifie_sin_1)", -0.4813, 0.4679],
+					"position": [0, -2, 1]
+				},
+				"bomb": {
+					"relative_to": {
+						"rotation": "entity"
+					},
+					"rotation": [0, 0, 0.01],
+					"position": [0.38268, "3 + math.ease_in_quad(0, 10, v.modifie_sin_2)", -3.07612]
+				},
+				"leftArm": {
+					"rotation": [0, -22.5, "math.ease_in_sine(0, -5, v.modifie_sin_4)"],
+					"position": [0, -1, 0]
+				},
+				"rightLeg": {
+					"position": [0, 0, -0.5]
+				},
+				"leftLeg": {
+					"rotation": [0, -22.5, 0],
+					"position": [0, 0, 0.5]
+				}
+			}
+		}
+	}
+}

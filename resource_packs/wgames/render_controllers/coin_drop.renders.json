@@ -1,0 +1,17 @@
+{
+  "format_version": "1.26.0",
+  "render_controllers": {
+    "controller.render.coin_drop": {
+      "geometry": "geometry.default",
+      "materials": [
+        {
+          "*": "material.alphatest",
+          "sobre": "material.additive"
+        }
+      ],
+      "textures": [
+        "texture.default"
+      ]
+    }
+  }
+}

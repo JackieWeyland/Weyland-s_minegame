@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.0",
+  "render_controllers": {
+    "controller.render.bomba_item": {
+      "geometry": "geometry.default",
+      "materials": [
+        {
+          "*": "material.alphatest",
+          "sobre": "material.additive",
+          "pavil": "material.emissive"
+        }
+      ],
+      "textures": [
+        "texture.default"
+      ]
+    }
+  }
+}

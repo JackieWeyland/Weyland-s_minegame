@@ -1,0 +1,45 @@
+{
+  "format_version": "1.26.50",
+  "sound_definitions": {
+    "bomba_party.music.01": {
+      "category": "record",
+      "sounds": [
+        {
+          "name": "sounds/music/bomba_party/bomba_party_music_01",
+          "stream": true,
+          "is3D": false
+        }
+      ]
+    },
+    "bomba_party.music.02": {
+      "category": "record",
+      "sounds": [
+        {
+          "name": "sounds/music/bomba_party/bomba_party_music_02",
+          "stream": true,
+          "is3D": false
+        }
+      ]
+    },
+    "bomba_party.music.03": {
+      "category": "record",
+      "sounds": [
+        {
+          "name": "sounds/music/bomba_party/bomba_party_music_03",
+          "stream": true,
+          "is3D": false
+        }
+      ]
+    },
+    "bomba_party.music.04": {
+      "category": "record",
+      "sounds": [
+        {
+          "name": "sounds/music/bomba_party/bomba_party_music_04",
+          "stream": true,
+          "is3D": false
+        }
+      ]
+    }
+  }
+}
