@@ -7,8 +7,8 @@ var GERAL_CONF = {
     "wgames:bomb_party_npc": "bomb_party"
   },
   "locations": {
-    "lobby": { x: 14, y: 1, z: 9 }
-    // 14 1 9
+    "lobby": { x: 2, y: 1, z: 3 }
+    // 2 1 3
   },
   "power_up_types": {
     "wgames:speed_power_up": {
@@ -95,29 +95,71 @@ function randomBetween(a, b) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// scripts/features/power_ups_manager.ts
+// scripts/features/special_entities_system.ts
 import { world } from "@minecraft/server";
-var PowerUpsManager = class {
-  static setPowerUp(definitions) {
+var SpecialEntitiesDefinitions = class {
+  static "wgames:speed_power_up" = function(player, entity) {
+    const effecType = "speed", amplifier = 2, duration = 160;
+    player.addEffect(effecType, duration, { amplifier });
+    entity.remove();
+  };
+  static "wgames:coin_drop" = function(player, entity) {
+    player.playSound("random.orb");
+    player.playSound("random.pop");
+    entity.remove();
+  };
+};
+var SpecialEntity = class {
+  static SetEntities(definitions) {
     const dimension = world.getDimension("overworld");
     Object.keys(definitions).forEach((type) => {
       const locations = definitions[type].locations;
-      locations.forEach((location) => {
+      for (const location of locations) {
         const entities = dimension.getEntities({ type, location, maxDistance: 2 });
-        if (entities.length > 0) return;
+        if (entities.length > 0) continue;
         dimension.spawnEntity(type, location);
-      });
+      }
     });
   }
-  static onHit(event) {
+  static setEntitiesBetweenLocations(definitions) {
+    const dimension = world.getDimension("overworld");
+    for (const type in definitions) {
+      const locationA = definitions[type].pos1;
+      const locationB = definitions[type].pos2;
+      let maxEntities = definitions[type].maxEntities;
+      while (maxEntities > 0) {
+        maxEntities--;
+        const location = {
+          x: randomBetween(locationA.x, locationB.x),
+          y: randomBetween(locationA.y, locationB.y),
+          z: randomBetween(locationA.z, locationB.z)
+        };
+        const maxDistance = definitions[type].entityArroundDistance;
+        const maxEntitiesArround = definitions[type].maxEntitiesArround;
+        const entitiesArround = dimension.getEntities({ type, location, maxDistance }).length;
+        if (entitiesArround < maxEntitiesArround) {
+          dimension.spawnEntity(type, location);
+        }
+      }
+    }
+  }
+  static ProximitScan() {
+    const players = world.getAllPlayers();
+    for (const player of players) {
+      const location = player.location, maxDistance = 1, excludeFamilies = ["player"];
+      const entities = player.dimension.getEntities({ location, maxDistance, excludeFamilies });
+      if (entities.length === 0) continue;
+      for (const entity of entities) {
+        const action = SpecialEntitiesDefinitions[entity.typeId];
+        if (typeof action !== "function") continue;
+        action(player, entity);
+      }
+    }
+  }
+  static OnHit(event) {
     if (event.damagingEntity.typeId !== "minecraft:player") return;
-    const powerUpList = Object.keys(GERAL_CONF.power_up_types);
-    if (!powerUpList.includes(event.hitEntity.typeId)) return;
-    const defitinion = GERAL_CONF.power_up_types[event.hitEntity.typeId];
-    const player = event.damagingEntity;
-    const powerUper = event.hitEntity;
-    player.addEffect(defitinion.effect, defitinion.duration, { amplifier: defitinion.power });
-    powerUper.remove();
+    const action = SpecialEntitiesDefinitions[event.hitEntity.typeId];
+    if (typeof action === "function") action(event.damagingEntity, event.hitEntity);
   }
 };
 
@@ -260,7 +302,7 @@ var BombPatyGame = class {
       this.state = 2 /* Running */;
       onTransferBomb([...this.players], bombMan);
       TimerManager.SetTimer(gameConf.game_duration, bombTimer, onDetoneBomb);
-      PowerUpsManager.setPowerUp(gameConf.power_ups);
+      SpecialEntity.SetEntities(gameConf.power_ups);
       console.log("[BombaPartyGame]: Round started!");
       MusicManager.playRandomMusic([...this.players], this.gameId);
     };
@@ -472,7 +514,12 @@ import { EntityComponentTypes as EntityComponentTypes2 } from "@minecraft/server
 function onPlayerJoinInWorld(event) {
   if (!event.initialSpawn) return;
   const player = event.player;
-  player.teleport(GERAL_CONF.locations.lobby);
+  const location = GERAL_CONF.locations.lobby;
+  player.teleport({
+    x: randomBetween(location.x - 5, location.x + 5),
+    y: location.y,
+    z: randomBetween(location.x - 5, location.x + 5)
+  });
   const container = player.getComponent(EntityComponentTypes2.Inventory).container;
   container.clearAll();
   player.getEffects().forEach((e) => player.removeEffect(e.typeId));
@@ -481,7 +528,7 @@ function onPlayerJoinInWorld(event) {
 // scripts/event_routers.ts
 world3.afterEvents.entityHitEntity.subscribe(function(event) {
   BombPartyManager.OnHitEvent(event);
-  PowerUpsManager.onHit(event);
+  SpecialEntity.OnHit(event);
 });
 world3.afterEvents.itemUse.subscribe(function(event) {
   BombPartyManager.OnItemUse(event);
@@ -494,6 +541,48 @@ world3.afterEvents.playerLeave.subscribe(function(event) {
 });
 world3.afterEvents.playerSpawn.subscribe(function(event) {
   onPlayerJoinInWorld(event);
+});
+
+// scripts/system.ts
+import { EntityComponentTypes as EntityComponentTypes3, system as system3, world as world4 } from "@minecraft/server";
+function scanKarts() {
+  const karts = world4.getDimension("overworld").getEntities({ type: "wgames:iron_golem_kart" });
+  for (const kart of karts) {
+    const rideable = kart.getComponent(EntityComponentTypes3.Rideable);
+    const rider = rideable.getRiders()[0];
+    if (!rider) continue;
+    const velocity = kart.getVelocity();
+    const maxVelocity = 1.4;
+    const speed = Math.hypot(velocity.x, velocity.z);
+    const inputMove = rider.inputInfo.getMovementVector();
+    rider.onScreenDisplay.setActionBar(`spd.: ${String(speed).slice(0, 4)} | ace.: ${String(inputMove.y).slice(0, 4)} | dir.:${String(inputMove.x).slice(0, 4)}`);
+    if (Math.abs(inputMove.y) > 0.1 && speed < maxVelocity) {
+      const initialImpulse = 0.01;
+      const view = kart.getViewDirection();
+      const acceleration = 0.5;
+      const maxInput = Math.max(Math.abs(inputMove.x), Math.abs(inputMove.y));
+      const throttle = maxInput > 0 ? inputMove.y / maxInput : 0;
+      const impulse = (initialImpulse + speed) * acceleration * throttle;
+      kart.applyImpulse({
+        x: view.x * impulse,
+        y: 0,
+        z: view.z * impulse
+      });
+    }
+    if (Math.abs(inputMove.x) > 0.1) {
+      const speedFactor = Math.min(1, speed / maxVelocity);
+      const turnSpeed = 10;
+      const rot = kart.getRotation();
+      kart.setRotation({
+        x: rot.x,
+        y: rot.y - inputMove.x * turnSpeed * speedFactor
+      });
+    }
+  }
+}
+system3.runInterval(function() {
+  scanKarts();
+  SpecialEntity.ProximitScan();
 });
 
 //# sourceMappingURL=../debug/main.js.map

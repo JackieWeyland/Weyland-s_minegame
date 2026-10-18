@@ -1,0 +1,20 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "wgames:iron_golem_kart",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "geometry": {
+        "default": "geometry.iron_golem_kart"
+      },
+      "textures": {
+        "default": "textures/mobs_karts/karts/iron_golem_kart"
+      },
+      "render_controllers": [
+        "controller.render.default"
+      ]
+    }
+  }
+}

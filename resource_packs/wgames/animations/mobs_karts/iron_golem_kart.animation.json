@@ -1,0 +1,189 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.kart_moviment.new": {
+			"loop": true,
+			"bones": {
+				"cart": {
+					"rotation": [
+						"-v.car_speed * -5",
+						"-v.car_yaw_speed",
+						"v.car_yaw_speed"
+					]
+				},
+				"Propellant": {
+					"rotation": [
+						"-v.car_speed * -22.5",
+						0,
+						"v.car_yaw_speed"
+					]
+				},
+				"Propellant4": {
+					"rotation": [
+						"-v.car_speed * -22.5",
+						0,
+						"-v.car_yaw_speed"
+					]
+				},
+				"Propellant2": {
+					"rotation": [
+						"-v.car_speed * -22.5",
+						0,
+						"v.car_yaw_speed"
+					]
+				},
+				"Propellant3": {
+					"rotation": [
+						"-v.car_speed * -22.5",
+						0,
+						"-v.car_yaw_speed"
+					]
+				},
+				"pulsating": {
+					"position": [
+						0,
+						"-v.pulse_time_1 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_1 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_1 * 0.0028)"
+					]
+				},
+				"pulsating2": {
+					"position": [
+						0,
+						"-v.pulse_time_2 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_2 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_2 * 0.0028)"
+					]
+				},
+				"pulsating3": {
+					"position": [
+						0,
+						"-v.pulse_time_3 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_3 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_3 * 0.0028)"
+					]
+				},
+				"pulsating4": {
+					"position": [
+						0,
+						"-v.pulse_time_1 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_1 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_1 * 0.0028)"
+					]
+				},
+				"pulsating5": {
+					"position": [
+						0,
+						"-v.pulse_time_2 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_2 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_2 * 0.0028)"
+					]
+				},
+				"pulsating6": {
+					"position": [
+						0,
+						"-v.pulse_time_3 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_3 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_3 * 0.0028)"
+					]
+				},
+				"pulsating7": {
+					"position": [
+						0,
+						"-v.pulse_time_1 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_1 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_1 * 0.0028)"
+					]
+				},
+				"pulsating8": {
+					"position": [
+						0,
+						"-v.pulse_time_2 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_2 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_2 * 0.0028)"
+					]
+				},
+				"pulsating9": {
+					"position": [
+						0,
+						"-v.pulse_time_3 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_3 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_3 * 0.0028)"
+					]
+				},
+				"pulsating10": {
+					"position": [
+						0,
+						"-v.pulse_time_1 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_1 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_1 * 0.0028)"
+					]
+				},
+				"pulsating11": {
+					"position": [
+						0,
+						"-v.pulse_time_2 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_2 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_2 * 0.0028)"
+					]
+				},
+				"pulsating12": {
+					"position": [
+						0,
+						"-v.pulse_time_3 * 0.02",
+						0
+					],
+					"scale": [
+						"1 -(v.pulse_time_3 * 0.0028)",
+						1,
+						"1 -(v.pulse_time_3 * 0.0028)"
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,38 @@
+{
+  "format_version": "1.26.0",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "wgames:iron_golem_kart",
+      "is_spawnable": true,
+      "is_summonable": true,
+      "is_experimental": false
+    },
+    "components": {
+      "minecraft:collision_box": {
+        "height": 1,
+        "width": 1
+      },
+      "minecraft:physics": {},
+      // "minecraft:free_camera_controlled": {
+      //   "backwards_movement_modifier": 0.1,
+      //   "strafe_speed_modifier": 0
+      // },
+      "minecraft:rideable": {
+        "controlling_seat": 0,
+        "seat_count": 1,
+        "family_types": [
+          "player"
+        ],
+        "seats": [
+          {
+            "position": [
+              0.2,
+              0.8,
+              -0.4
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

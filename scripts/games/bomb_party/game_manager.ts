@@ -1,7 +1,7 @@
 import { EntityComponentTypes, EntityHitEntityAfterEvent, EquipmentSlot, GameMode, ItemLockMode, ItemStack, ItemUseAfterEvent, Player, PlayerLeaveAfterEvent, system, Vector3 } from "@minecraft/server";
 import { GERAL_CONF } from "../../config";
 import { randomBetween, OnTickTimerEvent, TimerManager } from "../../utils";
-import { PowerUpsManager } from "../../features/power_ups_manager";
+import { SpecialEntity } from "../../features/special_entities_system";
 
 enum GameState {
   Waiting, // ESPERANDO COMEÇAR
@@ -162,7 +162,7 @@ export class BombPatyGame { // CRIADOR DE INSTANCIAS DE PARTIDAS
       onTransferBomb([...this.players], bombMan)
       // TimerCouter.Inverse(gameConf.game_duration, bombTimer, onDetoneBomb)
       TimerManager.SetTimer(gameConf.game_duration, bombTimer, onDetoneBomb)
-      PowerUpsManager.setPowerUp(gameConf.power_ups)
+      SpecialEntity.SetEntities(gameConf.power_ups)
 
       console.log('[BombaPartyGame]: Round started!');
       MusicManager.playRandomMusic([...this.players], this.gameId)

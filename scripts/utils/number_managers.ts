@@ -3,3 +3,5 @@ export function randomBetween(a: number, b: number) { // RETORNA UM NUMERO ALEAT
   const max = Math.max(a, b)
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
+
+// export function 

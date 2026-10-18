@@ -1,12 +1,12 @@
 import { world } from "@minecraft/server";
 import { BombPartyManager } from "./games";
 import { PressurePlateActions } from "./features";
-import { PowerUpsManager } from "./features/power_ups_manager";
+import { SpecialEntity } from "./features/special_entities_system";
 import { onPlayerJoinInWorld } from "./lobby/players_join";
 
 world.afterEvents.entityHitEntity.subscribe(function (event) {
   BombPartyManager.OnHitEvent(event)
-  PowerUpsManager.onHit(event)
+  SpecialEntity.OnHit(event)
 })
 
 world.afterEvents.itemUse.subscribe(function (event) {
