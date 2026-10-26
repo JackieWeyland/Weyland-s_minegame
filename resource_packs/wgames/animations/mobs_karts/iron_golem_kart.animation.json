@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.kart_moviment.new": {
+		"animation.kart.movement": {
 			"loop": true,
 			"bones": {
 				"cart": {

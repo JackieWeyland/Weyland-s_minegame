@@ -12,6 +12,26 @@
       "textures": {
         "default": "textures/mobs_karts/karts/iron_golem_kart"
       },
+      "scripts": {
+        "initialize": [
+          "v.speed_pulse = 500;",
+          "v.car_yaw_speed = 0;"
+        ],
+        "pre_animation": [
+          // "v.car_yaw_speed = -(q.yaw_speed / 10);",
+          "v.car_speed = q.modified_move_speed;",
+          "v.car_yaw_speed = math.lerp(v.car_yaw_speed, math.clamp(-q.yaw_speed / 2, -20, 20), 0.15);",
+          "v.pulse_time_1 = (math.min_angle(q.anim_time * v.speed_pulse) + 180);",
+          "v.pulse_time_2 = math.min_angle((q.anim_time + (120 / v.speed_pulse)) * v.speed_pulse) + 180;",
+          "v.pulse_time_3 = math.min_angle((q.anim_time + (240 / v.speed_pulse)) * v.speed_pulse) + 180;"
+        ],
+        "animate": [
+          "kart"
+        ]
+      },
+      "animations": {
+        "kart": "animation.kart.movement"
+      },
       "render_controllers": [
         "controller.render.default"
       ]

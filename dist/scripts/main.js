@@ -483,7 +483,6 @@ function gameRunningInterface(player) {
 // scripts/lobby/npcs_interaction.ts
 import { world as world2 } from "@minecraft/server";
 world2.afterEvents.playerInteractWithEntity.subscribe(function(event) {
-  console.log("pass", event.target.typeId);
   const gameId = GERAL_CONF.npc_of_game[event.target.typeId];
   const joinInGame = {
     "bomb_party": bombPartyInterface
@@ -515,11 +514,6 @@ function onPlayerJoinInWorld(event) {
   if (!event.initialSpawn) return;
   const player = event.player;
   const location = GERAL_CONF.locations.lobby;
-  player.teleport({
-    x: randomBetween(location.x - 5, location.x + 5),
-    y: location.y,
-    z: randomBetween(location.x - 5, location.x + 5)
-  });
   const container = player.getComponent(EntityComponentTypes2.Inventory).container;
   container.clearAll();
   player.getEffects().forEach((e) => player.removeEffect(e.typeId));
@@ -544,45 +538,201 @@ world3.afterEvents.playerSpawn.subscribe(function(event) {
 });
 
 // scripts/system.ts
-import { EntityComponentTypes as EntityComponentTypes3, system as system3, world as world4 } from "@minecraft/server";
-function scanKarts() {
-  const karts = world4.getDimension("overworld").getEntities({ type: "wgames:iron_golem_kart" });
-  for (const kart of karts) {
-    const rideable = kart.getComponent(EntityComponentTypes3.Rideable);
-    const rider = rideable.getRiders()[0];
-    if (!rider) continue;
-    const velocity = kart.getVelocity();
-    const maxVelocity = 1.4;
-    const speed = Math.hypot(velocity.x, velocity.z);
-    const inputMove = rider.inputInfo.getMovementVector();
-    rider.onScreenDisplay.setActionBar(`spd.: ${String(speed).slice(0, 4)} | ace.: ${String(inputMove.y).slice(0, 4)} | dir.:${String(inputMove.x).slice(0, 4)}`);
-    if (Math.abs(inputMove.y) > 0.1 && speed < maxVelocity) {
-      const initialImpulse = 0.01;
-      const view = kart.getViewDirection();
-      const acceleration = 0.5;
-      const maxInput = Math.max(Math.abs(inputMove.x), Math.abs(inputMove.y));
-      const throttle = maxInput > 0 ? inputMove.y / maxInput : 0;
-      const impulse = (initialImpulse + speed) * acceleration * throttle;
-      kart.applyImpulse({
-        x: view.x * impulse,
-        y: 0,
-        z: view.z * impulse
-      });
-    }
-    if (Math.abs(inputMove.x) > 0.1) {
-      const speedFactor = Math.min(1, speed / maxVelocity);
-      const turnSpeed = 10;
-      const rot = kart.getRotation();
-      kart.setRotation({
-        x: rot.x,
-        y: rot.y - inputMove.x * turnSpeed * speedFactor
-      });
-    }
+import { system as system4, world as world5 } from "@minecraft/server";
+
+// scripts/games/mobs_karts/karts_maneger.ts
+import { EntityComponentTypes as EntityComponentTypes3, InputMode, system as system3, world as world4 } from "@minecraft/server";
+function getMovementInput(rider) {
+  const inputMode = rider.inputInfo.lastInputModeUsed;
+  if (inputMode === InputMode.KeyboardAndMouse) {
+    const { x: valueX, y: valueY } = rider.inputInfo.getMovementVector();
+    return {
+      throttle: Math.sign(valueY),
+      steering: Math.sign(valueX)
+    };
   }
 }
-system3.runInterval(function() {
-  scanKarts();
+var MobsKart = class {
+  entity;
+  acceleration;
+  turnSpeed;
+  maxSpeed;
+  get currentSpeed() {
+    const velocity = this.entity.getVelocity();
+    return {
+      ...velocity,
+      hypotSpeed: Math.hypot(velocity.x, velocity.z)
+    };
+  }
+  get isOnGround() {
+    const hit = this.entity.dimension.getBlockFromRay(
+      this.entity.location,
+      { x: 0, y: -1, z: 0 },
+      { maxDistance: 1 }
+    );
+    return hit !== void 0;
+  }
+  get id() {
+    return this.entity.id;
+  }
+  get isValid() {
+    return this.entity.isValid;
+  }
+  constructor(arg0) {
+    this.entity = arg0.entity;
+    this.maxSpeed = arg0.maxSpeed;
+    this.turnSpeed = arg0.turnSpeed;
+    this.acceleration = arg0.acceleration;
+  }
+  // colision(currentSpeed: number) {
+  //   this.entity.dimension.getBlockFromRay()
+  // }
+  // physic(throttle: number, steering: number, currentSpeed: CurrentSpeedType) {
+  //   console.log(Math.sin(currentSpeed.x));
+  //   // console.log(((currentSpeed.x / currentSpeed.hypotSpeed) ?? 0));
+  //   if (currentSpeed.hypotSpeed > 0.5 && Math.abs(throttle) < 0.01) {
+  //     // console.log(currentSpeed.x, currentSpeed.z);
+  //     // console.log((Math.abs(currentSpeed.x) - 0.05) * Math.sign(currentSpeed.x));
+  //     // return
+  //     // const speed = currentSpeed.hypotSpeed
+  //     // this.entity.applyImpulse({
+  //     //   x: (speed > 0 ? currentSpeed.x / speed : 0) * 0.6,
+  //     //   y: 0,
+  //     //   z: (speed > 0 ? currentSpeed.z / speed : 0) * 0.6
+  //     // })
+  //   }
+  // }
+  accelerate(throttle, view, currentSpeed) {
+    const modifiedMaxSpeed = throttle < 0 ? 0.5 : this.maxSpeed;
+    if (currentSpeed.hypotSpeed > modifiedMaxSpeed || Math.abs(throttle) < 0.01) return;
+    const impulse = (0.01 + currentSpeed.hypotSpeed) * this.acceleration * throttle;
+    this.entity.applyImpulse({
+      x: view.x * impulse,
+      y: 0,
+      z: view.z * impulse
+    });
+  }
+  turn(steering, throttle, currentSpeed) {
+    if (Math.abs(steering) < 0.01) return;
+    const rot = this.entity.getRotation();
+    const turnFactor = Math.min(1, currentSpeed.hypotSpeed / this.maxSpeed);
+    this.entity.setRotation({
+      x: rot.x,
+      y: rot.y - steering * this.turnSpeed * turnFactor * Math.sign(throttle)
+    });
+  }
+  getRider() {
+    const rideable = this.entity.getComponent(EntityComponentTypes3.Rideable);
+    const rider = rideable.getRiders()[0];
+    return rider;
+  }
+  update() {
+    if (!this.entity.isValid) return;
+    const rider = this.getRider();
+    if (!rider) return;
+    const view = this.entity.getViewDirection();
+    const currentSpeed = this.currentSpeed;
+    const { steering, throttle } = getMovementInput(rider);
+    this.accelerate(throttle, view, currentSpeed);
+    this.turn(steering, throttle, currentSpeed);
+  }
+};
+var MobsKartManager = class {
+  static karts = /* @__PURE__ */ new Map();
+  static register(definition) {
+    const existing = this.karts.get(definition.entity.id);
+    if (existing) return existing;
+    const kart = new MobsKart(definition);
+    this.karts.set(definition.entity.id, kart);
+    return kart;
+  }
+  static getKart(entityId) {
+    return this.karts.get(entityId);
+  }
+  static removeKart(entityId) {
+    this.karts.delete(entityId);
+  }
+  static update() {
+    for (const [id, kart] of this.karts) {
+      if (!kart.isValid) {
+        this.karts.delete(id);
+        continue;
+      }
+      kart.update();
+    }
+  }
+};
+var lastBounce = /* @__PURE__ */ new Map();
+function bounceKart(entity, elasticity = 0.6) {
+  if (!entity.isValid) return;
+  const velocity = entity.getVelocity();
+  const speed = Math.hypot(velocity.x, velocity.z);
+  if (speed < 0.05) return;
+  const tick = system3.currentTick;
+  if (tick - (lastBounce.get(entity.id) ?? -100) < 4) return;
+  const direction = {
+    x: velocity.x / speed,
+    y: 0,
+    z: velocity.z / speed
+  };
+  const hit = entity.dimension.getBlockFromRay(
+    {
+      x: entity.location.x,
+      y: entity.location.y + 0.7,
+      z: entity.location.z
+    },
+    direction,
+    {
+      maxDistance: 1.6,
+      includePassableBlocks: false,
+      includeLiquidBlocks: false
+    }
+  );
+  if (!hit) return;
+  const normals = {
+    North: { x: 0, y: 0, z: -1 },
+    South: { x: 0, y: 0, z: 1 },
+    East: { x: 1, y: 0, z: 0 },
+    West: { x: -1, y: 0, z: 0 }
+  };
+  const normal = normals[hit.face];
+  if (!normal) return;
+  const dot = velocity.x * normal.x + velocity.z * normal.z;
+  if (dot >= 0) return;
+  const reflected = {
+    x: velocity.x - (1 + elasticity) * dot * normal.x,
+    y: velocity.y,
+    z: velocity.z - (1 + elasticity) * dot * normal.z
+  };
+  entity.clearVelocity();
+  entity.applyImpulse(reflected);
+  lastBounce.set(entity.id, tick);
+}
+system3.runInterval(() => {
+  const dimension = world4.getDimension("overworld");
+  for (const kart of dimension.getEntities({
+    type: "wgames:iron_golem_kart"
+  })) {
+    bounceKart(kart, 0.6);
+  }
+}, 1);
+
+// scripts/system.ts
+system4.runInterval(function() {
   SpecialEntity.ProximitScan();
+  MobsKartManager.update();
+});
+system4.run(function() {
+  const dimension = world5.getDimension("overworld");
+  dimension.getEntities({ type: "wgames:iron_golem_kart" }).forEach((e) => e.remove());
+  const player = world5.getPlayers()[0];
+  const entity = dimension.spawnEntity("wgames:iron_golem_kart", player.location);
+  MobsKartManager.register({
+    entity,
+    maxSpeed: 1.4,
+    turnSpeed: 6,
+    acceleration: 0.3
+  });
 });
 
 //# sourceMappingURL=../debug/main.js.map

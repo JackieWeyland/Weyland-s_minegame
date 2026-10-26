@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.0",
+  "format_version": "1.26.20",
   "minecraft:entity": {
     "description": {
       "identifier": "wgames:iron_golem_kart",
@@ -9,14 +9,34 @@
     },
     "components": {
       "minecraft:collision_box": {
-        "height": 1,
-        "width": 1
+        "height": 1.5,
+        "width": 2.5
       },
-      "minecraft:physics": {},
-      // "minecraft:free_camera_controlled": {
-      //   "backwards_movement_modifier": 0.1,
-      //   "strafe_speed_modifier": 0
+      "minecraft:physics": {
+        "has_collision": true,
+        "has_gravity": true
+      },
+      "minecraft:knockback_resistance": {
+        "value": 1
+      },
+      // "minecraft:bounciness": {
+      //   "value": 0.6
       // },
+      "minecraft:damage_sensor": {
+        "triggers": [
+          {
+            "cause": "all",
+            "deals_damage": "no"
+          }
+        ]
+      },
+      "minecraft:friction_modifier": {
+        "value": 0.0
+      },
+      "minecraft:horse.jump_strength": {
+        "value": 0.0
+      },
+      "minecraft:can_power_jump": {},
       "minecraft:rideable": {
         "controlling_seat": 0,
         "seat_count": 1,
@@ -25,6 +45,9 @@
         ],
         "seats": [
           {
+            "third_person_camera_radius": 7,
+            "camera_relax_distance_smoothing": 10,
+            "lock_rider_rotation": 181,
             "position": [
               0.2,
               0.8,
